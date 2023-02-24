@@ -15,9 +15,9 @@ import (
 
 func main() {
 
-	colorGreen := "\033[32m"
+	colorPurple := "\033[35m"
 	colorReset := "\033[0m"	
-	fmt.Println(string(colorGreen),`
+	fmt.Println(string(colorPurple),`
 	
  .d8888b.            .d8888b.                    
 d88P  Y88b          d88P  Y88b                   
@@ -29,7 +29,9 @@ Y88b  d88P Y88..88P Y88b  d88P 888 d88P Y88b 888
  "Y8888P88  "Y88P"   "Y8888P"  88888P"   "Y88888 
 			       888           888 
 			       888      Y8b d88P 
-			       888       "Y88P"`,string(colorReset))
+			       888       "Y88P"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~			       		
+			              By: Duerme`,string(colorReset))
 
 	fmt.Print("\n\n")
 	valInput := false
@@ -56,11 +58,23 @@ Y88b  d88P Y88..88P Y88b  d88P 888 d88P Y88b 888
 		fmt.Printf("Error opening wordlist file: %s\n", err)
 		return
 	}
+
 	defer wordlistResponse.Body.Close() // Keep reading wordlist response until the scan is done
 
 	scanner := bufio.NewScanner(wordlistResponse.Body) // Open the wordlist body with new Scanner
-	for scanner.Scan() { // Loop through each line of the wordlist
-		directoryName := scanner.Text()
+
+	wordcount := 0
+	var words[]string
+
+	for scanner.Scan(){ // Calculate the amount of directory names
+		wordcount++
+		words = append(words,scanner.Text())
+	}
+
+	fmt.Printf("Loaded %d possible directory names. Enumeration will now begin.\n", wordcount)
+
+	for i:= 0; i < len(words); i++ { // Loop through each line of the wordlist
+		directoryName := words[i]
 		directoryURL := websiteAddress + "/" + directoryName
 		response, err := http.Head(directoryURL)
 		if err == nil && response.StatusCode == 200 { // Ignore any status return other than 200 and print out the directory
