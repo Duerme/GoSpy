@@ -1,3 +1,3 @@
-module directory_enum.go
+module goSpy.go
 
 go 1.20
