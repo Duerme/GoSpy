@@ -1,6 +1,6 @@
 /*
 Duerme, 2023
-GoSpy, the multi purpose web scanning tool.
+GoSpy, a directory enumeration tool.
 */
 package main
 
